@@ -13,15 +13,12 @@ import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.HttpClientBuilder;
 
-//import com.fasterxml.jackson.databind.ObjectMapper;
-
 public class RestClient {
 
-	public LinkedList<String> getRequest(String url) {
-		LinkedList<String> lines = new LinkedList<String>();
+	public static String getRequest(String url) {
 		try {
 			HttpClient httpClient = HttpClientBuilder.create().build();
-			HttpGet get = new HttpGet("http://api.openweathermap.org/data/2.5/weather?q=London,uk&appid=da7c4d55907d8cff81b1e5a02bae88e6");
+			HttpGet get = new HttpGet(url);
 			get.addHeader("accept", "application/json");
 
 			HttpResponse response = httpClient.execute(get);
@@ -34,8 +31,7 @@ public class RestClient {
 
 			String line = "";
 			while ((line = rd.readLine()) != null) {
-				lines.add(line.trim());
-				System.out.println(line);
+				return line;
 			}
 		} catch (ClientProtocolException e1) {
 			e1.printStackTrace();
@@ -43,8 +39,7 @@ public class RestClient {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return lines;
-
+		return null;
 	}
 
 }

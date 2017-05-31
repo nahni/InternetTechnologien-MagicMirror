@@ -3,6 +3,7 @@
 package de.uniluebeck.gruppe4.dataservices.weather;
 
 import de.uniluebeck.gruppe4.rest.RestClient;
+import de.uniluebeck.gruppe4.utils.JSONParser;
 
 public class WeatherService {
 
@@ -11,14 +12,22 @@ public class WeatherService {
 	
 	public static void main(String[] args) {
 		WeatherService service = new WeatherService();
-		service.getActualWeather();
+		String actualWeather = service.getActualWeather();
+		String forecast = service.getForecast();
+		
+		double actualTemp = JSONParser.getTemperaturFromJSON(actualWeather);
+		System.out.println("actualTemp: " + actualTemp);
+		
+		double tomorrowTemp = JSONParser.getTomorrowsMaxTemperaturFromJSON(forecast);
+		System.out.println("tomorrowTemp: " + tomorrowTemp);
 	}
 	
-	public void getActualWeather() {
+	public String getActualWeather() {
+		return RestClient.getRequest(BASE_URL + "weather?q=London,uk&" + KEY);
+	}
 	
-		RestClient client = new RestClient();
-		client.getRequest(BASE_URL + "weather?q=London,uk&" + KEY);
-		
+	public String getForecast(){
+		return RestClient.getRequest(BASE_URL + "forecast?q=London,uk&" + KEY);
 	}
 	
 }
